@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run StockTrackerAPI (Debug)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/StockTrackerAPI/bin/Debug/net9.0/StockTrackerAPI.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/StockTrackerAPI",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  ]
+}
