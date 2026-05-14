@@ -282,6 +282,10 @@ function NewsCard({ article }: { article: NewsArticle }) {
             </>
           )}
 
+          <p className="prediction-disclaimer" style={{ marginTop: '0.75rem' }}>
+            AI-generated analysis for educational purposes only. Not financial advice.
+          </p>
+
           {(indianStocks.length > 0 || usStocks.length > 0) && (
             <div className="analysis-section-label">📈 Impacted Stocks</div>
           )}
@@ -788,6 +792,7 @@ function StockDetailModal({ quote, watchlist, onAddToWatchlist, onRemoveFromWatc
           <p className="prediction-headline">{prediction.headline}</p>
           <p className="prediction-reasoning">{prediction.reasoning}</p>
           <p className="prediction-disclaimer">⚠️ This is a technical signal only — it does not factor in news or fundamentals. Check the 📰 News tab for AI-driven fundamental analysis.</p>
+          <p className="prediction-disclaimer">AI-generated analysis for educational purposes only. Not financial advice.</p>
         </div>
 
         <div className="stock-story">
@@ -887,6 +892,7 @@ export default function Dashboard() {
   const [realQuotes, setRealQuotes] = useState<RealQuote[]>([]);
   const [quotesLoading, setQuotesLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [hubStatus, setHubStatus] = useState('Connecting...');
   const [liveSearch, setLiveSearch] = useState('');
   const [searchedQuote, setSearchedQuote] = useState<RealQuote | null>(null);
   const [searchedHistory, setSearchedHistory] = useState<number[]>([]);
@@ -944,8 +950,8 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    const hubUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5082/api')
-      .replace(/\/api$/, '') + '/hubs/stock';
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5082/api';
+    const hubUrl = apiUrl.replace(/\/api\/?$/, '') + '/hubs/stock';
 
     const conn = new HubConnectionBuilder()
       .withUrl(hubUrl, {
@@ -954,6 +960,19 @@ export default function Dashboard() {
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)
       .build();
+
+    conn.onreconnecting(error => {
+      setHubStatus('Reconnecting...');
+      console.warn('SignalR reconnecting', error);
+    });
+
+    conn.onreconnected(() => {
+      setHubStatus('Connected');
+    });
+
+    conn.onclose(() => {
+      setHubStatus('Disconnected');
+    });
 
     conn.on('PriceUpdate', (updates: Stock[]) => {
       // Update watchlist prices
@@ -981,7 +1000,12 @@ export default function Dashboard() {
       setTimeout(() => setNotification(''), 6000);
     });
 
-    conn.start().catch(console.error);
+    conn.start()
+      .then(() => setHubStatus('Connected'))
+      .catch(error => {
+        console.error(error);
+        setHubStatus('Disconnected');
+      });
     connRef.current = conn;
     return () => { conn.stop(); };
   }, [user.token]);
@@ -1239,6 +1263,12 @@ export default function Dashboard() {
           <div className="section-title-row">
             <h3 className="section-title">Popular Stocks — Real Prices</h3>
             <div className="live-status-row">
+              {hubStatus && (
+                <span className="live-badge" style={{ marginRight: '0.75rem', background: '#111827', borderColor: '#374151' }}>
+                  <span className="live-dot" />
+                  {hubStatus}
+                </span>
+              )}
               {lastUpdated && (
                 <span className="live-badge">
                   <span className="live-dot" />
@@ -1283,6 +1313,9 @@ export default function Dashboard() {
                 {newsSearchLoading ? 'Searching...' : '🔍 Search'}
               </button>
             </div>
+            <p className="prediction-disclaimer" style={{ marginTop: '0.75rem' }}>
+              AI-generated analysis for educational purposes only. Not financial advice.
+            </p>
           </div>
 
           {newsSearchResults !== null && (
