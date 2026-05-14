@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+export const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://stock-tracker-nfyt.onrender.com/api';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://stock-tracker-nfyt.onrender.com/api'
+  baseURL: apiBaseUrl
 });
 
 api.interceptors.request.use(cfg => {

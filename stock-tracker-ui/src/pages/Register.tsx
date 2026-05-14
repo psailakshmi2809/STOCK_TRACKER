@@ -8,15 +8,20 @@ export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       const res = await api.post('/auth/register', form);
       login(res.data);
       navigate('/');
     } catch {
       setError('Email already exists');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -33,7 +38,7 @@ export default function Register() {
             onChange={e => setForm({ ...form, email: e.target.value })} required />
           <input placeholder="Password" type="password" value={form.password}
             onChange={e => setForm({ ...form, password: e.target.value })} required />
-          <button type="submit">Register</button>
+          <button type="submit" disabled={loading}>{loading ? 'Loading…' : 'Register'}</button>
         </form>
         <p>Have an account? <Link to="/login">Login</Link></p>
       </div>

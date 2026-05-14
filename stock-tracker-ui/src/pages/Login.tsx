@@ -8,15 +8,20 @@ export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       const res = await api.post('/auth/login', form);
       login(res.data);
       navigate('/');
     } catch {
       setError('Invalid email or password');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,7 +36,7 @@ export default function Login() {
             onChange={e => setForm({ ...form, email: e.target.value })} required />
           <input placeholder="Password" type="password" value={form.password}
             onChange={e => setForm({ ...form, password: e.target.value })} required />
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>{loading ? 'Loading…' : 'Login'}</button>
         </form>
         <p>No account? <Link to="/register">Register</Link></p>
       </div>

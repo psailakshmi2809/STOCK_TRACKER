@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { HubConnectionBuilder, HubConnection, LogLevel } from '@microsoft/signalr';
-import api from '../api';
+import api, { apiBaseUrl } from '../api';
 import { useAuth } from '../AuthContext';
 
 interface Stock {
@@ -950,7 +950,12 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5082/api';
+    if (!user?.token) {
+      setHubStatus('Disconnected');
+      return;
+    }
+
+    const apiUrl = apiBaseUrl;
     const hubUrl = apiUrl.replace(/\/api\/?$/, '') + '/hubs/stock';
 
     const conn = new HubConnectionBuilder()
@@ -1008,7 +1013,7 @@ export default function Dashboard() {
       });
     connRef.current = conn;
     return () => { conn.stop(); };
-  }, [user.token]);
+  }, [user?.token]);
 
   const addToWatchlist = async (quote: RealQuote) => {
     const res = await api.post('/stock/watchlist', { symbol: quote.symbol, companyName: quote.companyName });
@@ -1103,7 +1108,7 @@ export default function Dashboard() {
       <header>
         <h1>📈 StockNova</h1>
         <div>
-          <span>Welcome, {user.name}</span>
+          <span>Welcome, {user?.name ?? 'Trader'}</span>
           <button className="btn-logout" onClick={logout}>Logout</button>
         </div>
       </header>
