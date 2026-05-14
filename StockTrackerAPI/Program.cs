@@ -49,7 +49,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 // CORS — allow Vite dev server
 builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
-    p.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173")
+    p.WithOrigins(
+        "http://localhost:5173", 
+        "http://127.0.0.1:5173",
+        "https://stock-tracker-black-five.vercel.app"
+    )
      .AllowAnyHeader()
      .AllowAnyMethod()
      .AllowCredentials()));
