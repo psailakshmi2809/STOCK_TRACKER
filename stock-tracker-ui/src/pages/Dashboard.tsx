@@ -58,7 +58,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const conn = new HubConnectionBuilder()
-      .withUrl('http://localhost:5082/hubs/stock', {
+      .withUrl('https://stock-tracker-nfyt.onrender.com/hubs/stock',  {
         accessTokenFactory: () => user.token
       })
       .withAutomaticReconnect()
