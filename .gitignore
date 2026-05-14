@@ -3,8 +3,24 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
-# dotenv files
+# ========================
+# SECRETS — NEVER COMMIT
+# ========================
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.json
 .env
+.env.local
+.env.*.local
+
+# ========================
+# Frontend dependencies
+# ========================
+node_modules/
+dist/
+.vite/
+
 
 # User-specific files
 *.rsuser

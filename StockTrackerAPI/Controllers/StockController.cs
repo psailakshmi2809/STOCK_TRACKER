@@ -29,8 +29,8 @@ namespace StockTrackerAPI.Controllers
         [HttpPost("watchlist")]
         public async Task<IActionResult> Add([FromBody] AddToWatchlistDTO dto)
         {
-            var result = await _stockService.AddToWatchlist(UserId, dto.Symbol);
-            if (result == null) return BadRequest("Symbol not found");
+            var result = await _stockService.AddToWatchlist(UserId, dto.Symbol, dto.CompanyName);
+            if (result == null) return BadRequest("Could not add symbol");
             return Ok(result);
         }
 

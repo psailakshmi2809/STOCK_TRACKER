@@ -23,7 +23,7 @@ export default function Register() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h2>📈 StockTracker</h2>
+        <h2>📈 StockNova</h2>
         <h3>Create Account</h3>
         {error && <p className="error">{error}</p>}
         <form onSubmit={submit}>

@@ -15,23 +15,26 @@ namespace StockTrackerAPI.Services
         }
 
         public IEnumerable<StockPriceDTO> GetAllStocks() =>
-            PriceFeedService.Prices.Keys.Select(PriceFeedService.GetSnapshot);
+            PriceFeedService.SYMBOLS.Select(s => PriceFeedService.GetSnapshot(s)).Where(s => s != null).Cast<StockPriceDTO>();
 
-        public async Task<WatchlistItem?> AddToWatchlist(string userId, string symbol)
+        public async Task<WatchlistItem?> AddToWatchlist(string userId, string symbol, string companyName = "")
         {
             symbol = symbol.ToUpper();
-            if (!PriceFeedService.Prices.ContainsKey(symbol)) return null;
 
             var exists = await _watchlist
                 .Find(w => w.UserId == userId && w.Symbol == symbol)
                 .FirstOrDefaultAsync();
             if (exists != null) return exists;
 
+            var name = !string.IsNullOrWhiteSpace(companyName)
+                ? companyName
+                : symbol;
+
             var item = new WatchlistItem
             {
                 UserId      = userId,
                 Symbol      = symbol,
-                CompanyName = PriceFeedService.Prices[symbol].CompanyName
+                CompanyName = name
             };
             await _watchlist.InsertOneAsync(item);
             return item;
@@ -48,9 +51,9 @@ namespace StockTrackerAPI.Services
                     Id            = w.Id!,
                     Symbol        = w.Symbol,
                     CompanyName   = w.CompanyName,
-                    Price         = snap.Price,
-                    Change        = snap.Change,
-                    ChangePercent = snap.ChangePercent
+                    Price         = snap?.Price ?? 0,
+                    Change        = snap?.Change ?? 0,
+                    ChangePercent = snap?.ChangePercent ?? 0
                 };
             }).ToList();
         }
