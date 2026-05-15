@@ -1,5 +1,10 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body, #root {
+  width: 100%;
+  min-height: 100%;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #0f1117;
@@ -10,7 +15,7 @@ body {
 /* Auth */
 .auth-page {
   display: flex; align-items: center; justify-content: center;
-  min-height: 100vh; background: #0f1117;
+  min-height: 100vh; background: #0f1117; padding: 1rem;
 }
 .auth-card {
   background: #1a1d27; border-radius: 12px; padding: 2rem;
@@ -65,7 +70,7 @@ header div { display: flex; align-items: center; gap: 1rem; color: #94a3b8; }
 
 /* Stock Grid */
 .stock-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 1.25rem; padding: 1rem 0;
 }
 .stock-card {
@@ -531,5 +536,149 @@ header div { display: flex; align-items: center; gap: 1rem; color: #94a3b8; }
 .affected-history {
   font-size: 0.76rem; color: #94a3b8; margin: 0; line-height: 1.5;
   border-top: 1px solid #1e2733; padding-top: 0.3rem;
+}
+
+@media (max-width: 900px) {
+  .dashboard {
+    padding: 1rem;
+  }
+
+  header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  header div,
+  .section-title-row,
+  .live-status-row,
+  .search-row,
+  .alert-item,
+  .mover-card,
+  .modal-header,
+  .news-meta,
+  .affected-stock-header {
+    flex-wrap: wrap;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .tabs button {
+    white-space: nowrap;
+  }
+
+  .top-movers-wrap,
+  .combined-verdict-signals {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .combined-verdict-signals {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .search-row button,
+  .alert-form-row button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-page {
+    padding: 0.75rem;
+  }
+
+  .auth-card,
+  .modal-panel {
+    padding: 1rem;
+  }
+
+  .dashboard {
+    padding: 0.75rem;
+  }
+
+  header h1 {
+    font-size: 1.2rem;
+  }
+
+  header div {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .tabs {
+    margin: 1rem 0;
+    padding-bottom: 0.25rem;
+  }
+
+  .tabs button {
+    padding: 0.6rem 0.85rem;
+    font-size: 0.88rem;
+  }
+
+  .stock-grid,
+  .top-movers-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .stock-card,
+  .mover-card,
+  .alert-form,
+  .live-search-box,
+  .news-card,
+  .top-movers-col {
+    padding: 0.85rem;
+  }
+
+  .stock-header,
+  .modal-price-row,
+  .section-title-row,
+  .live-status-row,
+  .news-meta,
+  .alert-item,
+  .mover-card {
+    gap: 0.5rem;
+  }
+
+  .search-row,
+  .alert-form-row {
+    flex-direction: column;
+  }
+
+  .search-row input,
+  .search-row button,
+  .alert-form-row select,
+  .alert-form-row input,
+  .alert-form-row button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .stock-price {
+    font-size: 1.2rem;
+  }
+
+  .mover-card-right {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .alert-item {
+    align-items: flex-start;
+  }
+
+  .news-topic {
+    margin-left: 0;
+  }
+
+  .suggest-ticker,
+  .fact-label,
+  .mover-sym {
+    min-width: 0;
+  }
 }
 
