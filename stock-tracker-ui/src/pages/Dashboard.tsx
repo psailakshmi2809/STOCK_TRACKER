@@ -1108,7 +1108,7 @@ export default function Dashboard() {
       <header>
         <h1>📈 StockNova</h1>
         <div>
-          <span>Welcome, {user?.name ?? 'Trader'}</span>
+          <span style={{ fontSize: '0.95rem', color: '#94a3b8' }}>Welcome, <strong style={{ color: '#818cf8' }}>{user?.name ?? 'Trader'}</strong>!</span>
           <button className="btn-logout" onClick={logout}>Logout</button>
         </div>
       </header>
