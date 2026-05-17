@@ -13,6 +13,7 @@
     <PackageReference Include="MongoDB.Driver" Version="3.8.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.74.0" />
   </ItemGroup>
 
 </Project>

@@ -26,5 +26,13 @@ namespace StockTrackerAPI.Controllers
             if (result == null) return Unauthorized("Invalid credentials");
             return Ok(result);
         }
+
+        [HttpPost("google")]
+        public async Task<IActionResult> GoogleLogin(GoogleLoginDTO dto)
+        {
+            var result = await _authService.LoginWithGoogle(dto);
+            if (result == null) return Unauthorized("Invalid Google token");
+            return Ok(result);
+        }
     }
 }

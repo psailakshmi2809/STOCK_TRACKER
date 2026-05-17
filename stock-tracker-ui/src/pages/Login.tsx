@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import api from '../api';
 import { useAuth } from '../AuthContext';
 
@@ -25,6 +26,29 @@ export default function Login() {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse: CredentialResponse | null) => {
+    setError('');
+    if (!credentialResponse?.credential) {
+      setError('Google login failed');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await api.post('/auth/google', { idToken: credentialResponse.credential });
+      login(res.data);
+      navigate('/');
+    } catch {
+      setError('Google login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Google login failed');
+  };
+
   return (
     <div className="auth-page">
       <div className="auth-card">
@@ -38,6 +62,8 @@ export default function Login() {
             onChange={e => setForm({ ...form, password: e.target.value })} required />
           <button type="submit" disabled={loading}>{loading ? 'Loading…' : 'Login'}</button>
         </form>
+        <div className="divider">or</div>
+        <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
         <p>No account? <Link to="/register">Register</Link></p>
       </div>
     </div>
