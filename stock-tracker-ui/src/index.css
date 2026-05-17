@@ -38,6 +38,22 @@ body {
 .auth-card a { color: #6366f1; text-decoration: none; }
 .error { color: #f87171; font-size: 0.875rem; text-align: center; }
 
+.divider {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin: 1rem 0; color: #4b5563; font-size: 0.85rem;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: #2d3148;
+}
+
+.google-btn-wrapper {
+  width: 100%;
+}
+.google-btn-wrapper > div,
+.google-btn-wrapper iframe {
+  width: 100% !important;
+}
+
 /* Dashboard */
 .dashboard { max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; }
 header {

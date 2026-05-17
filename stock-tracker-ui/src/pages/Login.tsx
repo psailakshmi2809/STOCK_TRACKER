@@ -63,7 +63,14 @@ export default function Login() {
           <button type="submit" disabled={loading}>{loading ? 'Loading…' : 'Login'}</button>
         </form>
         <div className="divider">or</div>
-        <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+        <div className="google-btn-wrapper">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            width="100%"
+            useOneTap={false}
+          />
+        </div>
         <p>No account? <Link to="/register">Register</Link></p>
       </div>
     </div>

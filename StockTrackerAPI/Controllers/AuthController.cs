@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using StockTrackerAPI.DTOs;
 using StockTrackerAPI.Services;
 
@@ -12,6 +13,7 @@ namespace StockTrackerAPI.Controllers
         public AuthController(AuthService authService) => _authService = authService;
 
         [HttpPost("register")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
             var result = await _authService.Register(dto);
@@ -20,6 +22,7 @@ namespace StockTrackerAPI.Controllers
         }
 
         [HttpPost("login")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> Login(LoginDTO dto)
         {
             var result = await _authService.Login(dto);
@@ -28,6 +31,7 @@ namespace StockTrackerAPI.Controllers
         }
 
         [HttpPost("google")]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> GoogleLogin(GoogleLoginDTO dto)
         {
             var result = await _authService.LoginWithGoogle(dto);
